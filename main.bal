@@ -39,6 +39,15 @@ service /updates on new http:Listener(9090) {
         return results;
     }
 
+    resource function get getUpdateLevelMetadata() returns json|error? {
+        http:Client updates = check new (API_Host);
+
+        json results = check updates->get("/updates/1.0.0/product-update-levels", {
+            "Authorization": "Bearer " + access_token
+        });
+
+        return results;
+    }
 }
 
 function searchUrl(string base, string product, string productVersion, string channel, string startUpdateLevel, string endUpdateLevel) returns string {
