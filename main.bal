@@ -26,6 +26,19 @@ service /updates on new http:Listener(9090) {
 
         return results;
     }
+
+    resource function get getAvailableUpdates/[string product]/[string productVersion]/[string channel]/[string startUpdateLevel]/[string endUpdateLevel]() returns json|error? {
+        http:Client updates = check new (API_Host);
+
+        string base = "/updates/1.0.0";
+
+        json results = check updates->get(searchUrl(base, product, productVersion, channel, startUpdateLevel, endUpdateLevel), {
+            "Authorization": "Bearer " + access_token
+        });
+
+        return results;
+    }
+
 }
 
 function searchUrl(string base, string product, string productVersion, string channel, string startUpdateLevel, string endUpdateLevel) returns string {
